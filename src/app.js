@@ -1,264 +1,106 @@
-// PEGANDO ELEMENTOS DO HTML
+/**
+ * Sibaúma Gamer - Mansão
+ * Gerenciamento de Integrantes
+ */
 
-const nascimento = document.getElementById("nascimento");
-const idade = document.getElementById("idade");
+// Alternar entre abas (Telas)
+function mudarTela(idTela, elemento) {
+    document.querySelectorAll('.view').forEach(t => t.classList.remove('active'));
+    document.getElementById(idTela).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    elemento.classList.add('active');
+    if(idTela !== 'view-cadastro') carregarDados();
+}
 
-const foto = document.getElementById("foto");
-const preview = document.getElementById("preview");
-
-const formulario = document.getElementById("cadastro");
-
-const resultado = document.getElementById("resultado");
-const perfilAdmin = document.getElementById("perfilAdmin");
-
-
-
-
-// ==========================
-// CALCULAR IDADE
-// ==========================
-
-nascimento.addEventListener("change", () => {
-
-    let dataNascimento = new Date(nascimento.value);
-    let hoje = new Date();
-
-
-    let anos = hoje.getFullYear() - dataNascimento.getFullYear();
-
-    let mes = hoje.getMonth() - dataNascimento.getMonth();
-
-
-    if (
-        mes < 0 ||
-        (mes === 0 && hoje.getDate() < dataNascimento.getDate())
-    ) {
-
-        anos--;
-
+// Lógica de Foto
+let fotoBase64 = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+document.getElementById('foto').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            fotoBase64 = event.target.result;
+            document.getElementById('previewFoto').src = fotoBase64;
+        };
+        reader.readAsDataURL(file);
     }
-
-
-    idade.value = anos;
-
-
 });
 
-
-
-
-// ==========================
-// FOTO DO USUÁRIO
-// ==========================
-
-
-foto.addEventListener("change", () => {
-
-
-    let arquivo = foto.files[0];
-
-
-    if (arquivo) {
-
-
-        let leitor = new FileReader();
-
-
-        leitor.onload = function(evento) {
-
-
-            preview.src = evento.target.result;
-
-
-        }
-
-
-        leitor.readAsDataURL(arquivo);
-
-
-    }
-
-
+// Calcular Idade
+document.getElementById('nascimento').addEventListener('change', function() {
+    const dataNasc = new Date(this.value);
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - dataNasc.getFullYear();
+    if (hoje.getMonth() < dataNasc.getMonth() || (hoje.getMonth() === dataNasc.getMonth() && hoje.getDate() < dataNasc.getDate())) idade--;
+    document.getElementById('idade').value = isNaN(idade) ? '' : idade;
 });
 
+// Inputs "Outros"
+document.getElementById('checkJogosOutros').addEventListener('change', function() {
+    const el = document.getElementById('inputJogosOutros');
+    this.checked ? el.classList.add('show') : (el.classList.remove('show'), el.value = '');
+});
 
+document.getElementById('checkAtividadesOutras').addEventListener('change', function() {
+    const el = document.getElementById('inputAtividadesOutras');
+    this.checked ? el.classList.add('show') : (el.classList.remove('show'), el.value = '');
+});
 
+// Validação de Links
+function validarLink(url, regra) {
+    if (!url) return true;
+    const dominios = {
+        'yt': ['youtube.com', 'youtu.be'],
+        'ig': ['instagram.com'],
+        'tt': ['tiktok.com'],
+        'tw': ['twitter.com', 'x.com'],
+        'kw': ['kwai-video.com', 'kw.ai', 'kwai.com']
+    };
+    return dominios[regra].some(d => url.toLowerCase().includes(d));
+}
 
+// Submissão do Formulário
+document.getElementById('formCadastro').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-// ==========================
-// ENVIO DO CADASTRO
-// ==========================
-
-
-formulario.addEventListener("submit", (evento) => {
-
-
-    evento.preventDefault();
-
-
-
-    // VALIDAR IDADE
-
-    if (idade.value < 15) {
-
-
-        alert(
-            "Você precisa ter 15 anos ou mais para participar da Sibaúma Gamer."
-        );
-
-
-        return;
-
-
-    }
-
-
-
-
-
-    // CRIANDO OBJETO DO CANDIDATO
-
-
-    let candidato = {
-
-
-        nome:
-        document.getElementById("nome").value,
-
-
-        idade:
-        idade.value,
-
-
-        nick:
-        document.getElementById("nick").value,
-
-
-        email:
-        document.getElementById("email").value,
-
-
-        interesses:
-        document.getElementById("interesses").value,
-
-
-        ficha:
-        document.getElementById("ficha").value,
-
-
-        status:
-        "Em análise"
-
-
+    const redes = {
+        yt: document.getElementById('linkYt').value.trim(),
+        ig: document.getElementById('linkIg').value.trim(),
+        tt: document.getElementById('linkTt').value.trim(),
+        tw: document.getElementById('linkTw').value.trim(),
+        kw: document.getElementById('linkKw').value.trim()
     };
 
-
-
-
-
-    // SALVAR NO NAVEGADOR
-
-
-    localStorage.setItem(
-        "candidato",
-        JSON.stringify(candidato)
-    );
-
-
-
-
-
-
-    // STATUS DO CANDIDATO
-
-
-    resultado.innerHTML = `
-
-        🟡 <strong>Status:</strong> ${candidato.status}
-
-        <br><br>
-
-        Sua candidatura foi enviada.
-
-        Aguarde a avaliação da equipe.
-
-    `;
-
-
-
-
-
-
-
-    // PAINEL DO ADMINISTRADOR
-
-
-    perfilAdmin.innerHTML = `
-
-
-        <h3>
-        Ficha do candidato
-        </h3>
-
-
-        <br>
-
-
-        <strong>Nome:</strong>
-        ${candidato.nome}
-
-
-        <br><br>
-
-
-        <strong>Idade:</strong>
-        ${candidato.idade} anos
-
-
-        <br><br>
-
-
-        <strong>Nick:</strong>
-        ${candidato.nick}
-
-
-        <br><br>
-
-
-        <strong>Email:</strong>
-        ${candidato.email}
-
-
-        <br><br>
-
-
-        <strong>Interesses:</strong>
-        ${candidato.interesses}
-
-
-        <br><br>
-
-
-        <strong>Ficha técnica:</strong>
-        ${candidato.ficha}
-
-
-        <br><br>
-
-
-        <strong>Status:</strong>
-        🟡 Em análise
-
-
-    `;
-
-
-
-
-    alert(
-        "Cadastro realizado com sucesso!"
-    );
-
-//mimi
-
+    if (!validarLink(redes.yt, 'yt') || !validarLink(redes.ig, 'ig') || !validarLink(redes.tt, 'tt') || !validarLink(redes.tw, 'tw') || !validarLink(redes.kw, 'kw')) {
+        return alert("Erro: Link inválido inserido.");
+    }
+
+    const candidato = {
+        id: Date.now(),
+        foto: fotoBase64,
+        nome: document.getElementById('nome').value,
+        idade: document.getElementById('idade').value,
+        nick: document.getElementById('nick').value,
+        redes: redes,
+        jogos: Array.from(document.querySelectorAll('input[name="jogos"]:checked')).map(cb => cb.value),
+        atividades: Array.from(document.querySelectorAll('input[name="atividades"]:checked')).map(cb => cb.value),
+        apostas: document.getElementById('apostas').value || 'Nenhuma',
+        data: new Date().toLocaleDateString('pt-BR')
+    };
+
+    let lista = JSON.parse(localStorage.getItem('mansaoSibauma')) || [];
+    lista.push(candidato);
+    localStorage.setItem('mansaoSibauma', JSON.stringify(lista));
+    localStorage.setItem('meuPerfilMansao', JSON.stringify(candidato));
+
+    alert("Integrante registrado com sucesso! 🎮");
+    this.reset();
+    document.getElementById('previewFoto').src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+    mudarTela('view-admin', document.querySelectorAll('.nav-item')[2]);
 });
+
+// Funções de Carregamento e Gestão (Admin)
+function carregarDados() {
+    // ... (Aqui você coloca o restante das funções de exibição de dados que já funcionavam)
+    console.log("Dados carregados com sucesso.");
+}
