@@ -1,9 +1,92 @@
-/* Cole todo o seu código CSS aqui, começando por: */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
 :root {
-    --bg-color: #0f0f13;
-    /* ... (resto do seu código CSS) ... */
+    --bg-dark: #09090b;
+    --panel-bg: rgba(24, 24, 27, 0.7);
+    --accent: #8b5cf6;
+    --text-main: #ffffff;
+    --text-muted: #a1a1aa;
+    --border: rgba(255, 255, 255, 0.1);
 }
 
-/* ... mantenha todo o restante do CSS original ... */
+body {
+    background: radial-gradient(circle at top right, #1e1b4b, #09090b);
+    color: var(--text-main);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 420px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(12px);
+    padding: 30px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.logo-img {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 25px auto;
+    display: block;
+    border-radius: 25px;
+    border: 3px solid var(--accent);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
+.campo { margin-bottom: 25px; }
+
+label {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: var(--accent);
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+.check-item {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px;
+    border-radius: 16px;
+    text-align: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+}
+
+.check-item:hover { border-color: var(--accent); }
+
+.extra-input {
+    display: none;
+    margin-top: 15px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
