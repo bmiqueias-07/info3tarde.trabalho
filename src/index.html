@@ -1,20 +1,997 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
+
 <html lang="pt-BR">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <title>Sibaúma Gamer - Mansão</title>
-    <!-- Link para o CSS -->
-    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+
+
+        :root {
+
+            --bg-color: #0f0f13;
+
+            --card-bg: #1c1c24;
+
+            --primary: #8b5cf6;
+
+            --primary-hover: #7c3aed;
+
+            --secondary: #0ea5e9;
+
+            --text-main: #f8fafc;
+
+            --text-muted: #94a3b8;
+
+            --danger: #ef4444;
+
+            --warning: #f59e0b;
+
+            --success: #10b981;
+
+        }
+
+
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+            font-family: 'Poppins', sans-serif;
+
+            -webkit-tap-highlight-color: transparent;
+
+        }
+
+
+
+        body {
+
+            background-color: #000;
+
+            display: flex;
+
+            justify-content: center;
+
+            color: var(--text-main);
+
+        }
+
+
+
+        .app-container {
+
+            width: 100%;
+
+            max-width: 480px;
+
+            background-color: var(--bg-color);
+
+            min-height: 100vh;
+
+            position: relative;
+
+            padding-bottom: 80px;
+
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
+
+            overflow-x: hidden;
+
+        }
+
+
+
+        header {
+
+            background: linear-gradient(135deg, #1e1e2f 0%, #151520 100%);
+
+            padding: 2rem 1.5rem 1.5rem;
+
+            text-align: center;
+
+            border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+
+            border-radius: 0 0 25px 25px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 10;
+
+        }
+
+
+
+        .logo { font-size: 3rem; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5)); }
+
+        header h1 { font-size: 1.5rem; font-weight: 700; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        header p { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+
+
+        .view { display: none; padding: 1.5rem; animation: fadeIn 0.3s ease; }
+
+        .view.active { display: block; }
+
+
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+
+
+        .view-title { font-size: 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+
+
+
+        .foto-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem; }
+
+        .foto-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); margin-bottom: 1rem; background-color: var(--card-bg); }
+
+        .foto-label { background-color: rgba(139, 92, 246, 0.1); color: var(--primary); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: 1px solid var(--primary); }
+
+        .foto-label input { display: none; }
+
+
+
+        .campo { margin-bottom: 1.2rem; }
+
+        .campo label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600; }
+
+        .campo input[type="text"], .campo input[type="date"], .campo input[type="email"], .campo input[type="url"], .campo textarea {
+
+            width: 100%; background-color: var(--card-bg); border: 1px solid #2d2d3b; color: var(--text-main); padding: 12px 15px; border-radius: 12px; font-size: 0.95rem; outline: none; transition: 0.3s ease;
+
+        }
+
+        .campo input:focus, .campo textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
+
+        .campo input[readonly] { background-color: rgba(255,255,255,0.02); color: var(--text-muted); }
+
+
+
+        .redes-sociais-grupo {
+
+            background-color: rgba(255,255,255,0.02);
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            border: 1px dashed #2d2d3b;
+
+        }
+
+        .redes-sociais-grupo input { margin-bottom: 10px; }
+
+
+
+        .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
+
+        .check-item { background-color: var(--card-bg); border: 1px solid #2d2d3b; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer; }
+
+        .check-item:has(input:checked) { border-color: var(--primary); background-color: rgba(139, 92, 246, 0.1); }
+
+        .hidden-input { display: none; margin-top: 10px; border-color: var(--primary) !important; }
+
+        .hidden-input.show { display: block; animation: fadeIn 0.3s ease; }
+
+
+
+        button.btn-submit { width: 100%; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+
+
+
+        .card-info { background-color: var(--card-bg); border-radius: 16px; padding: 1.5rem; border: 1px solid #2d2d3b; margin-bottom: 1rem; position: relative; }
+
+        .card-info h3 { color: var(--secondary); margin-bottom: 0.5rem; }
+
+        .card-info p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem; line-height: 1.4;}
+
+        
+
+        .tag { display: inline-block; background: rgba(139, 92, 246, 0.2); color: var(--primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; margin: 2px; }
+
+        
+
+        .link-social { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; font-size: 0.75rem; color: var(--secondary); text-decoration: none; margin: 3px; border: 1px solid #2d2d3b;}
+
+        
+
+        .btn-excluir { position: absolute; top: 15px; right: 15px; background-color: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); padding: 5px 10px; border-radius: 8px; font-size: 0.7rem; cursor: pointer; }
+
+        .btn-editar { position: absolute; top: 15px; right: 85px; background-color: rgba(245, 158, 11, 0.1); color: var(--warning); border: 1px solid var(--warning); padding: 5px 10px; border-radius: 8px; font-size: 0.7rem; cursor: pointer; }
+
+
+
+        .vazio { text-align: center; color: var(--text-muted); padding: 2rem 0; font-style: italic; }
+
+
+
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 480px; background-color: #151520; display: flex; justify-content: space-around; padding: 10px 0 15px; border-top: 1px solid #2d2d3b; z-index: 100; }
+
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); font-size: 0.75rem; cursor: pointer; width: 33%; }
+
+        .nav-item .icon { font-size: 1.4rem; margin-bottom: 4px; filter: grayscale(100%); opacity: 0.6; }
+
+        .nav-item.active { color: var(--primary); font-weight: 600; }
+
+        .nav-item.active .icon { filter: grayscale(0%); opacity: 1; }
+
+
+
+        /* Modal do Admin */
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 200; justify-content: center; align-items: center; }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-content { background: var(--bg-color); width: 90%; max-width: 400px; padding: 20px; border-radius: 16px; border: 1px solid var(--primary); box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+
+        .modal-content h3 { margin-bottom: 15px; color: var(--primary); }
+
+        .btn-fechar { background: none; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 10px; border-radius: 8px; width: 100%; margin-top: 10px; cursor: pointer;}
+
+    </style>
+
 </head>
+
 <body>
 
+
+
 <div class="app-container">
-    <!-- Cole o conteúdo HTML aqui (do header até o fechamento da div app-container) -->
-    <!-- ... (mantenha seu HTML exatamente como está no seu código original) ... -->
+
+
+
+    <header>
+
+        <div class="logo">🎮</div>
+
+        <h1>Sibaúma Gamer</h1>
+
+        <p>Plataforma de Gestão da Mansão</p>
+
+    </header>
+
+
+
+    <!-- TELA 1: CADASTRO -->
+
+    <section id="view-cadastro" class="view active">
+
+        <h2 class="view-title">👤 Novo Integrante</h2>
+
+
+
+        <form id="formCadastro">
+
+            <div class="foto-container">
+
+                <img id="previewFoto" class="foto-preview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+
+                <label class="foto-label">
+
+                    📷 Alterar Foto
+
+                    <input type="file" id="foto" accept="image/*">
+
+                </label>
+
+            </div>
+
+
+
+            <div class="campo">
+
+                <label>Nome completo</label>
+
+                <input type="text" id="nome" required placeholder="Digite o nome">
+
+            </div>
+
+
+
+            <div class="campo">
+
+                <label>Nick / Nome de usuário</label>
+
+                <input type="text" id="nick" required placeholder="Ex: SibaumaPro">
+
+            </div>
+
+
+
+            <div class="campo" style="display: flex; gap: 10px;">
+
+                <div style="flex: 1;">
+
+                    <label>Nascimento</label>
+
+                    <input type="date" id="nascimento" required>
+
+                </div>
+
+                <div style="width: 80px;">
+
+                    <label>Idade</label>
+
+                    <input type="text" id="idade" readonly>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- REDES SOCIAIS (COM VALIDAÇÃO) -->
+
+            <div class="campo">
+
+                <label>Redes Sociais (Opcional - Pode deixar vazio)</label>
+
+                <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px;">* Apenas links oficiais das redes abaixo. O Admin pode adicionar depois.</p>
+
+                <div class="redes-sociais-grupo">
+
+                    <input type="url" id="linkYt" placeholder="Link do YouTube">
+
+                    <input type="url" id="linkIg" placeholder="Link do Instagram">
+
+                    <input type="url" id="linkTt" placeholder="Link do TikTok / TikTok Lite">
+
+                    <input type="url" id="linkTw" placeholder="Link do Twitter (X)">
+
+                    <input type="url" id="linkKw" placeholder="Link do Kwai">
+
+                </div>
+
+            </div>
+
+
+
+            <div class="campo">
+
+                <label>Jogos de Interesse</label>
+
+                <div class="checkbox-grid">
+
+                    <label class="check-item"><input type="checkbox" name="jogos" value="Free Fire"> Free Fire</label>
+
+                    <label class="check-item"><input type="checkbox" name="jogos" value="Roblox"> Roblox</label>
+
+                    <label class="check-item"><input type="checkbox" name="jogos" value="Fortnite"> Fortnite</label>
+
+                    <label class="check-item"><input type="checkbox" id="checkJogosOutros"> Outros</label>
+
+                </div>
+
+                <input type="text" id="inputJogosOutros" class="hidden-input" placeholder="Escreva os outros jogos aqui...">
+
+            </div>
+
+
+
+            <div class="campo">
+
+                <label>Atividades / Modalidades</label>
+
+                <div class="checkbox-grid">
+
+                    <label class="check-item"><input type="checkbox" name="atividades" value="X1"> X1</label>
+
+                    <label class="check-item"><input type="checkbox" name="atividades" value="X2"> X2</label>
+
+                    <label class="check-item"><input type="checkbox" name="atividades" value="Squad"> Equipe</label>
+
+                    <label class="check-item"><input type="checkbox" name="atividades" value="Interclasse"> Interclasse</label>
+
+                    <label class="check-item"><input type="checkbox" name="atividades" value="Futebol"> Futebol (Físico)</label>
+
+                    <label class="check-item"><input type="checkbox" id="checkAtividadesOutras"> Outras</label>
+
+                </div>
+
+                <input type="text" id="inputAtividadesOutras" class="hidden-input" placeholder="Escreva outras modalidades aqui...">
+
+            </div>
+
+
+
+            <div class="campo">
+
+                <label>Tipos de Apostas de Interesse</label>
+
+                <input type="text" id="apostas" placeholder="Ex: Pix, Skins, Pontos na Mansão...">
+
+            </div>
+
+
+
+            <button type="submit" class="btn-submit">Registrar Integrante 🚀</button>
+
+        </form>
+
+    </section>
+
+
+
+    <!-- TELA 2: STATUS -->
+
+    <section id="view-status" class="view">
+
+        <h2 class="view-title">📋 Meu Perfil</h2>
+
+        <div id="resultadoStatus"></div>
+
+    </section>
+
+
+
+    <!-- TELA 3: ADMIN -->
+
+    <section id="view-admin" class="view">
+
+        <h2 class="view-title">🛡️ Gerenciamento da Mansão</h2>
+
+        <div id="listaAdmin"></div>
+
+    </section>
+
+
+
+    <!-- NAV INFERIOR -->
+
+    <nav class="bottom-nav">
+
+        <div class="nav-item active" onclick="mudarTela('view-cadastro', this)">
+
+            <span class="icon">📝</span>
+
+            <span>Cadastro</span>
+
+        </div>
+
+        <div class="nav-item" onclick="mudarTela('view-status', this)">
+
+            <span class="icon">👤</span>
+
+            <span>Perfil</span>
+
+        </div>
+
+        <div class="nav-item" onclick="mudarTela('view-admin', this)">
+
+            <span class="icon">🛡️</span>
+
+            <span>Painel</span>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- MODAL DE EDIÇÃO DE REDES (Só pro Admin) -->
+
+    <div id="modalRedes" class="modal-overlay">
+
+        <div class="modal-content">
+
+            <h3>✏️ Adicionar Redes Sociais</h3>
+
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Atualize os links do integrante.</p>
+
+            
+
+            <input type="hidden" id="editId">
+
+            <div class="campo"><input type="url" id="editYt" placeholder="Link do YouTube"></div>
+
+            <div class="campo"><input type="url" id="editIg" placeholder="Link do Instagram"></div>
+
+            <div class="campo"><input type="url" id="editTt" placeholder="Link do TikTok / TikTok Lite"></div>
+
+            <div class="campo"><input type="url" id="editTw" placeholder="Link do Twitter (X)"></div>
+
+            <div class="campo"><input type="url" id="editKw" placeholder="Link do Kwai"></div>
+
+            
+
+            <button class="btn-submit" onclick="salvarRedesAdmin()" style="margin-top: 0;">Salvar Alterações</button>
+
+            <button class="btn-fechar" onclick="fecharModal()">Cancelar</button>
+
+        </div>
+
+    </div>
+
+
+
 </div>
 
-<!-- Link para o JS -->
-<script src="script.js"></script>
+
+
+<script>
+
+    function mudarTela(idTela, elemento) {
+
+        document.querySelectorAll('.view').forEach(t => t.classList.remove('active'));
+
+        document.getElementById(idTela).classList.add('active');
+
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+
+        elemento.classList.add('active');
+
+        if(idTela !== 'view-cadastro') carregarDados();
+
+    }
+
+
+
+    let fotoBase64 = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+    document.getElementById('foto').addEventListener('change', function(e) {
+
+        const file = e.target.files[0];
+
+        if (file) {
+
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+
+                fotoBase64 = event.target.result;
+
+                document.getElementById('previewFoto').src = fotoBase64;
+
+            }
+
+            reader.readAsDataURL(file);
+
+        }
+
+    });
+
+
+
+    document.getElementById('nascimento').addEventListener('change', function() {
+
+        const dataNasc = new Date(this.value);
+
+        const hoje = new Date();
+
+        let idade = hoje.getFullYear() - dataNasc.getFullYear();
+
+        if (hoje.getMonth() < dataNasc.getMonth() || (hoje.getMonth() === dataNasc.getMonth() && hoje.getDate() < dataNasc.getDate())) idade--;
+
+        document.getElementById('idade').value = isNaN(idade) ? '' : idade;
+
+    });
+
+
+
+    document.getElementById('checkJogosOutros').addEventListener('change', function() {
+
+        const el = document.getElementById('inputJogosOutros');
+
+        this.checked ? el.classList.add('show') : (el.classList.remove('show'), el.value = '');
+
+    });
+
+
+
+    document.getElementById('checkAtividadesOutras').addEventListener('change', function() {
+
+        const el = document.getElementById('inputAtividadesOutras');
+
+        this.checked ? el.classList.add('show') : (el.classList.remove('show'), el.value = '');
+
+    });
+
+
+
+    function getChecked(name) { return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value); }
+
+
+
+    // --- FUNÇÃO DE VALIDAÇÃO DOS SITES ---
+
+    function validarLink(url, regra) {
+
+        if (!url) return true; // Vazio é permitido
+
+        url = url.toLowerCase();
+
+        const dominios = {
+
+            'yt': ['youtube.com', 'youtu.be'],
+
+            'ig': ['instagram.com'],
+
+            'tt': ['tiktok.com'],
+
+            'tw': ['twitter.com', 'x.com'],
+
+            'kw': ['kwai-video.com', 'kw.ai', 'kwai.com']
+
+        };
+
+        return dominios[regra].some(dominio => url.includes(dominio));
+
+    }
+
+
+
+    document.getElementById('formCadastro').addEventListener('submit', function(e) {
+
+        e.preventDefault();
+
+
+
+        const redes = {
+
+            yt: document.getElementById('linkYt').value.trim(),
+
+            ig: document.getElementById('linkIg').value.trim(),
+
+            tt: document.getElementById('linkTt').value.trim(),
+
+            tw: document.getElementById('linkTw').value.trim(),
+
+            kw: document.getElementById('linkKw').value.trim()
+
+        };
+
+
+
+        // Verifica um por um se foram digitados sites errados
+
+        if (!validarLink(redes.yt, 'yt')) return alert("Erro: O link do YouTube é inválido.");
+
+        if (!validarLink(redes.ig, 'ig')) return alert("Erro: O link do Instagram é inválido.");
+
+        if (!validarLink(redes.tt, 'tt')) return alert("Erro: O link do TikTok é inválido.");
+
+        if (!validarLink(redes.tw, 'tw')) return alert("Erro: O link do Twitter é inválido.");
+
+        if (!validarLink(redes.kw, 'kw')) return alert("Erro: O link do Kwai é inválido.");
+
+        
+
+        let jogosSelecionados = getChecked('jogos');
+
+        if(document.getElementById('checkJogosOutros').checked && document.getElementById('inputJogosOutros').value) jogosSelecionados.push(document.getElementById('inputJogosOutros').value);
+
+
+
+        let atividadesSelecionadas = getChecked('atividades');
+
+        if(document.getElementById('checkAtividadesOutras').checked && document.getElementById('inputAtividadesOutras').value) atividadesSelecionadas.push(document.getElementById('inputAtividadesOutras').value);
+
+
+
+        const candidato = {
+
+            id: Date.now(),
+
+            foto: fotoBase64,
+
+            nome: document.getElementById('nome').value,
+
+            idade: document.getElementById('idade').value,
+
+            nick: document.getElementById('nick').value,
+
+            redes: redes,
+
+            jogos: jogosSelecionados,
+
+            atividades: atividadesSelecionadas,
+
+            apostas: document.getElementById('apostas').value || 'Nenhuma',
+
+            data: new Date().toLocaleDateString('pt-BR')
+
+        };
+
+
+
+        let lista = JSON.parse(localStorage.getItem('mansaoSibauma')) || [];
+
+        localStorage.setItem('meuPerfilMansao', JSON.stringify(candidato));
+
+        lista.push(candidato);
+
+        localStorage.setItem('mansaoSibauma', JSON.stringify(lista));
+
+
+
+        alert("Integrante registrado com sucesso! 🎮");
+
+        this.reset();
+
+        document.getElementById('previewFoto').src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+        mudarTela('view-admin', document.querySelectorAll('.nav-item')[2]);
+
+    });
+
+
+
+    // --- FUNÇÕES DO ADMIN PARA EDITAR/EXCLUIR ---
+
+    function removerCandidato(id) {
+
+        if(confirm("Tem certeza que deseja remover este integrante?")) {
+
+            let lista = JSON.parse(localStorage.getItem('mansaoSibauma')) || [];
+
+            lista = lista.filter(cand => cand.id !== id);
+
+            localStorage.setItem('mansaoSibauma', JSON.stringify(lista));
+
+            carregarDados();
+
+        }
+
+    }
+
+
+
+    function abrirModalEdicao(id) {
+
+        let lista = JSON.parse(localStorage.getItem('mansaoSibauma')) || [];
+
+        let cand = lista.find(c => c.id === id);
+
+        if(cand) {
+
+            document.getElementById('editId').value = cand.id;
+
+            document.getElementById('editYt').value = cand.redes.yt || '';
+
+            document.getElementById('editIg').value = cand.redes.ig || '';
+
+            document.getElementById('editTt').value = cand.redes.tt || '';
+
+            document.getElementById('editTw').value = cand.redes.tw || '';
+
+            document.getElementById('editKw').value = cand.redes.kw || '';
+
+            document.getElementById('modalRedes').classList.add('active');
+
+        }
+
+    }
+
+
+
+    function fecharModal() {
+
+        document.getElementById('modalRedes').classList.remove('active');
+
+    }
+
+
+
+    function salvarRedesAdmin() {
+
+        const id = parseInt(document.getElementById('editId').value);
+
+        const novasRedes = {
+
+            yt: document.getElementById('editYt').value.trim(),
+
+            ig: document.getElementById('editIg').value.trim(),
+
+            tt: document.getElementById('editTt').value.trim(),
+
+            tw: document.getElementById('editTw').value.trim(),
+
+            kw: document.getElementById('editKw').value.trim()
+
+        };
+
+
+
+        if (!validarLink(novasRedes.yt, 'yt') || !validarLink(novasRedes.ig, 'ig') || !validarLink(novasRedes.tt, 'tt') || !validarLink(novasRedes.tw, 'tw') || !validarLink(novasRedes.kw, 'kw')) {
+
+            return alert("Erro: Pelo menos um dos links inseridos é de um site não permitido.");
+
+        }
+
+
+
+        let lista = JSON.parse(localStorage.getItem('mansaoSibauma')) || [];
+
+        let index = lista.findIndex(c => c.id === id);
+
+        if(index !== -1) {
+
+            lista[index].redes = novasRedes;
+
+            localStorage.setItem('mansaoSibauma', JSON.stringify(lista));
+
+            
+
+            // Atualiza também o "Meu Perfil" se for a mesma pessoa
+
+            let meuPerfil = JSON.parse(localStorage.getItem('meuPerfilMansao'));
+
+            if(meuPerfil && meuPerfil.id === id) {
+
+                meuPerfil.redes = novasRedes;
+
+                localStorage.setItem('meuPerfilMansao', JSON.stringify(meuPerfil));
+
+            }
+
+
+
+            alert("Redes sociais atualizadas!");
+
+            fecharModal();
+
+            carregarDados();
+
+        }
+
+    }
+
+
+
+    function gerarTags(array) {
+
+        if(!array || array.length === 0) return '<span class="tag">Nenhum</span>';
+
+        return array.map(item => `<span class="tag">${item}</span>`).join('');
+
+    }
+
+
+
+    function gerarLinksSociais(redes) {
+
+        if(!redes) return '<span style="color:#94a3b8; font-size:0.8rem;">Sem redes vinculadas</span>';
+
+        let linksHtml = '';
+
+        if(redes.yt) linksHtml += `<a href="${redes.yt}" target="_blank" class="link-social">▶️ YouTube</a>`;
+
+        if(redes.ig) linksHtml += `<a href="${redes.ig}" target="_blank" class="link-social">📸 Instagram</a>`;
+
+        if(redes.tt) linksHtml += `<a href="${redes.tt}" target="_blank" class="link-social">🎵 TikTok</a>`;
+
+        if(redes.tw) linksHtml += `<a href="${redes.tw}" target="_blank" class="link-social">🐦 Twitter(X)</a>`;
+
+        if(redes.kw) linksHtml += `<a href="${redes.kw}" target="_blank" class="link-social">🟧 Kwai</a>`;
+
+        return linksHtml || '<span style="color:#94a3b8; font-size:0.8rem;">Sem redes vinculadas</span>';
+
+    }
+
+
+
+    function carregarDados() {
+
+        const meuPerfil = JSON.parse(localStorage.getItem('meuPerfilMansao'));
+
+        const divStatus = document.getElementById('resultadoStatus');
+
+        
+
+        if (meuPerfil) {
+
+            divStatus.innerHTML = `
+
+                <div class="card-info" style="text-align:center;">
+
+                    <img src="${meuPerfil.foto}" style="width:90px; height:90px; border-radius:50%; border:3px solid #8b5cf6; object-fit:cover;">
+
+                    <h2>${meuPerfil.nick}</h2>
+
+                </div>
+
+                <div class="card-info">
+
+                    <p><strong>Nome:</strong> ${meuPerfil.nome} (${meuPerfil.idade} anos)</p>
+
+                    <div style="margin: 10px 0;"><strong>📱 Redes:</strong><br> ${gerarLinksSociais(meuPerfil.redes)}</div>
+
+                    <div style="margin-top: 10px;"><strong>🎮 Jogos:</strong><br> ${gerarTags(meuPerfil.jogos)}</div>
+
+                    <div style="margin-top: 10px;"><strong>⚔️ Modalidades:</strong><br> ${gerarTags(meuPerfil.atividades)}</div>
+
+                </div>
+
+            `;
+
+        } else {
+
+            divStatus.innerHTML = '<div class="vazio">Nenhum perfil registrado neste aparelho.</div>';
+
+        }
+
+
+
+        const lista = JSON.parse(localStorage.getItem('mansaoSibauma')) || [];
+
+        const divAdmin = document.getElementById('listaAdmin');
+
+
+
+        if (lista.length > 0) {
+
+            divAdmin.innerHTML = ''; 
+
+            lista.forEach(cand => {
+
+                divAdmin.innerHTML += `
+
+                    <div class="card-info" style="padding-top: 2rem;">
+
+                        <button class="btn-editar" onclick="abrirModalEdicao(${cand.id})">Editar Redes</button>
+
+                        <button class="btn-excluir" onclick="removerCandidato(${cand.id})">Excluir</button>
+
+                        
+
+                        <div style="display:flex; align-items:center; gap:15px; margin-bottom: 10px;">
+
+                            <img src="${cand.foto}" style="width:60px; height:60px; border-radius:50%; object-fit:cover; border: 2px solid #8b5cf6;">
+
+                            <div>
+
+                                <h3 style="margin:0;">${cand.nick}</h3>
+
+                                <p style="margin:0; font-size:0.8rem;">${cand.nome} • ${cand.idade} anos</p>
+
+                            </div>
+
+                        </div>
+
+                        <div style="margin: 5px 0;">${gerarLinksSociais(cand.redes)}</div>
+
+                        <p style="margin: 5px 0;"><strong>Jogos:</strong> ${gerarTags(cand.jogos)}</p>
+
+                        <p style="margin: 5px 0;"><strong>Atividades:</strong> ${gerarTags(cand.atividades)}</p>
+
+                    </div>
+
+                `;
+
+            });
+
+        } else {
+
+            divAdmin.innerHTML = '<div class="vazio">A mansão está vazia no momento.</div>';
+
+        }
+
+    }
+
+</script>
+
+
+
 </body>
-</html>
+
+</html> 
